@@ -1,5 +1,5 @@
-from django.template.defaulttags import now
 from rest_framework import serializers
+
 from apps.oauth.models import AuthUser, SocialLink
 
 
@@ -43,5 +43,3 @@ class UserSerializer(serializers.ModelSerializer):
         ref_name = "my_user"
         model = AuthUser
         fields = ('id', 'email', 'avatar', 'username', 'is_staff', 'tickets', 'answers', 'social_links')
-
-
