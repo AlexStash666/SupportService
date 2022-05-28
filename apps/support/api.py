@@ -3,7 +3,6 @@ from rest_framework.generics import get_object_or_404
 from rest_framework.permissions import AllowAny, IsAdminUser
 from rest_framework.response import Response
 from rest_framework.status import HTTP_405_METHOD_NOT_ALLOWED
-
 from apps.support.models.answer import Answer
 from apps.support.models.ticket import Ticket
 from ..support.serializers import (
@@ -71,7 +70,6 @@ class TicketViewSet(mixins.CreateModelMixin,
         serializer.is_valid(raise_exception=True)
         serializer.save(user=self.request.user, ticket_id=pk)
         headers = self.get_success_headers(serializer.data)
-        # answer = Answer.objects.get(ticket_id=self.request.data['id'])
         send_new_answer_email.delay('alexanderstashinski@gmail.com', str(request.data))
         return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
 

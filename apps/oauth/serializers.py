@@ -24,6 +24,9 @@ class RegistrationSerializer(serializers.ModelSerializer):
 
 
 class SocialLinkSerializer(serializers.ModelSerializer):
+    """
+    Social link serializer.
+    """
     id = serializers.IntegerField(read_only=True)
 
     class Meta:
@@ -35,7 +38,6 @@ class UserSerializer(serializers.ModelSerializer):
     """
     User detail serializer.
     """
-
     class Meta:
         social_links = SocialLinkSerializer(many=True)
         ref_name = "my_user"

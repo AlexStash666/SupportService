@@ -1,7 +1,6 @@
 from rest_framework import serializers
-from ..support.models.answer import Answer
-from ..support.models.ticket import Ticket
-from ..oauth.serializers import UserSerializer as my_user
+from apps.support.models.answer import Answer
+from apps.support.models.ticket import Ticket
 
 
 class FilterAnswerListSerializer(serializers.ListSerializer):
@@ -31,7 +30,6 @@ class AnswerListSerializer(serializers.ModelSerializer):
     """
     children = RecursiveSerializer(many=True, read_only=True)
     user = serializers.SlugRelatedField(slug_field='username', read_only=True)
-    #  user = my_user(read_only=True)
     ticket = serializers.SlugRelatedField(slug_field='id', read_only=True)
 
     class Meta:
@@ -45,7 +43,6 @@ class TicketDetailSerializer(serializers.ModelSerializer):
     Ticket detail info
     """
     answers = AnswerListSerializer(many=True, read_only=True, required=False)
-    # user = my_user(read_only=True)
     user = serializers.SlugRelatedField(slug_field='username', read_only=True)
 
     class Meta:

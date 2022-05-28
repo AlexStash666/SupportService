@@ -1,6 +1,5 @@
 from django.core.validators import FileExtensionValidator
 from django.db import models
-
 from apps.base.services import get_path_upload_screenshot, validate_size_image, delete_old_file
 from apps.oauth.models import AuthUser
 from apps.support.models.ticket import Ticket
