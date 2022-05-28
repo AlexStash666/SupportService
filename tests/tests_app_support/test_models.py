@@ -2,7 +2,7 @@ import pytest
 from model_bakery import baker
 
 from apps.oauth.models import AuthUser
-from apps.support.models import Ticket, Answer
+from apps.support.models import Answer
 from tests.tests_app_support.factories import TicketFactory
 
 
@@ -27,5 +27,3 @@ def test_create_user(user1):
 @pytest.mark.django_db()
 def test_create_admin_user(admin_user):
     assert admin_user.username == "questioner"
-
-

@@ -1,11 +1,9 @@
-from model_bakery import baker
-import factory
 import json
-import pytest
 
-from apps.oauth.models import AuthUser
-from apps.support.models import Answer, Ticket
-from tests.tests_app_support.factories import TicketFactory
+import pytest
+from model_bakery import baker
+
+from apps.support.models import Ticket
 
 pytestmark = pytest.mark.django_db
 
