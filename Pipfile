@@ -1,0 +1,29 @@
+[[source]]
+url = "https://pypi.org/simple"
+verify_ssl = true
+name = "pypi"
+
+[packages]
+django = "*"
+djangorestframework = "*"
+drf-spectacular = "*"
+djoser = "*"
+djangorestframework-simplejwt = "*"
+psycopg2 = "*"
+pillow = "*"
+wq = "*"
+pytest-django = "*"
+model-bakery = "*"
+factory-boy = "*"
+faker = "*"
+django-mock-queries = "*"
+pytest-mock = "*"
+requests-mock = "*"
+celery = "*"
+redis = "*"
+flower = "*"
+
+[dev-packages]
+
+[requires]
+python_version = "3.8"
