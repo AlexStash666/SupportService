@@ -1,19 +1,20 @@
 from rest_framework import viewsets, mixins, status
+from rest_framework.decorators import action
 from rest_framework.generics import get_object_or_404
 from rest_framework.permissions import AllowAny, IsAdminUser
 from rest_framework.response import Response
 from rest_framework.status import HTTP_405_METHOD_NOT_ALLOWED
+
+from apps.base.permissions import IsAuthorOrAdmin
 from apps.support.models.answer import Answer
 from apps.support.models.ticket import Ticket
+from apps.support.tasks import send_new_ticket_email, send_update_ticket_email, send_new_answer_email
 from ..support.serializers import (
     TicketListSerializer,
     TicketDetailSerializer,
     AnswerListSerializer,
     AnswerDetailSerializer,
 )
-from apps.base.permissions import IsAuthorOrAdmin
-from rest_framework.decorators import action
-from apps.support.tasks import send_new_ticket_email, send_update_ticket_email, send_new_answer_email
 
 
 class TicketViewSet(mixins.CreateModelMixin,
@@ -35,24 +36,19 @@ class TicketViewSet(mixins.CreateModelMixin,
     def list(self, request, *args, **kwargs):
         if request.user.is_staff:
             queryset = Ticket.objects.all()
-            serializer = TicketListSerializer(queryset, many=True)
-            return Response(serializer.data)
         else:
             queryset = Ticket.objects.filter(user=self.request.user)
-            serializer = TicketListSerializer(queryset, many=True)
-            return Response(serializer.data)
+        serializer = TicketListSerializer(queryset, many=True)
+        return Response(serializer.data)
 
     def retrieve(self, request, pk=None, **kwargs):
         if request.user.is_staff:
             queryset = Ticket.objects.all()
-            ticket = get_object_or_404(queryset, pk=pk)
-            serializer = TicketDetailSerializer(ticket)
-            return Response(serializer.data)
         else:
             queryset = Ticket.objects.filter(user=self.request.user)
-            ticket = get_object_or_404(queryset, pk=pk)
-            serializer = TicketDetailSerializer(ticket)
-            return Response(serializer.data)
+        ticket = get_object_or_404(queryset, pk=pk)
+        serializer = TicketDetailSerializer(ticket)
+        return Response(serializer.data)
 
     def update(self, request, *args, **kwargs):
         ticket = Ticket.objects.get(title=self.request.data['title'])
@@ -94,9 +90,8 @@ class AnswerViewSet(mixins.RetrieveModelMixin,
         return Answer.objects.all()
 
     def list(self, request, *args, **kwargs):
-        if request.user.is_staff:
-            queryset = Answer.objects.all()
-            serializer = AnswerListSerializer(queryset, many=True)
-            return Response(serializer.data)
-        else:
+        if not request.user.is_staff:
             return Response(status=HTTP_405_METHOD_NOT_ALLOWED)
+        queryset = Answer.objects.all()
+        serializer = AnswerListSerializer(queryset, many=True)
+        return Response(serializer.data)
