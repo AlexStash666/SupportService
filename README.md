@@ -6,7 +6,7 @@ Technology stack:
     <li>DRF</li>
     <li>Celery+Redis</li>
  
- [https://t.me/AlexStash](https://t.me/AlexStash) Автор
+ [https://t.me/AlexStash](https://t.me/AlexStash) Author
     
   Installation
   ------------
