@@ -45,7 +45,7 @@ class TicketViewSet(mixins.CreateModelMixin,
         return Response(serializer.data)
 
     def update(self, request, *args, **kwargs):
-        ticket = Ticket.objects.get(title=self.request.data['title'])
+        ticket = Ticket.objects.get(title=self.request.data.get('title'))
         send_update_ticket_email.delay('alexanderstashinski@gmail.com', str(ticket))
 
     def get_serializer_class(self):
