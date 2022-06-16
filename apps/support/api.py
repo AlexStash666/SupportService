@@ -34,18 +34,12 @@ class TicketViewSet(mixins.CreateModelMixin,
         send_new_ticket_email.delay('alexanderstashinski@gmail.com', serializer.data)
 
     def list(self, request, *args, **kwargs):
-        if request.user.is_staff:
-            queryset = Ticket.objects.all()
-        else:
-            queryset = Ticket.objects.filter(user=self.request.user)
+        queryset = self.get_queryset
         serializer = TicketListSerializer(queryset, many=True)
         return Response(serializer.data)
 
     def retrieve(self, request, pk=None, **kwargs):
-        if request.user.is_staff:
-            queryset = Ticket.objects.all()
-        else:
-            queryset = Ticket.objects.filter(user=self.request.user)
+        queryset = self.get_queryset
         ticket = get_object_or_404(queryset, pk=pk)
         serializer = TicketDetailSerializer(ticket)
         return Response(serializer.data)
@@ -57,8 +51,11 @@ class TicketViewSet(mixins.CreateModelMixin,
     def get_serializer_class(self):
         return TicketDetailSerializer
 
-    def get_queryset(self):
-        return Ticket.objects.all()
+    def get_queryset(self, request):
+        if request.user.is_staff:
+            return Ticket.objects.all()
+        else:
+            return Ticket.objects.filter(user=self.request.user)
 
     @action(methods=('post',), detail=True, permission_classes=(IsAuthorOrAdmin,))
     def create_answer(self, request, pk=None):

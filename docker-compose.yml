@@ -25,6 +25,28 @@ services:
     ports:
       - 5432:5432
 
+  redis:
+    image: redis
+    hostname: redis
+    ports:
+      - 6379:6379
+
+  celery:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    command: celery -A drftrades worker -B -l INFO
+    volumes:
+      - .:/usr/src/app
+    env_file:
+      - .env.dev
+    links:
+      - redis
+    depends_on:
+      - db
+      - redis
+      - web
+
   nginx:
     build: ./nginx
     container_name: support_service_nginx
