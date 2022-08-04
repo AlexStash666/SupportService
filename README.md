@@ -11,3 +11,5 @@ Technology stack:
 <p>Docker-compose</p>
 
     docker-compose up --build
+    docker exec -it support_service_web bash
+    python manage.py createsuperuser
